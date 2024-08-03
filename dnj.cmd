@@ -37,20 +37,20 @@
 :://///////////////////////////////////////////////////////////////////////////
 :_listDir <path>
     set "targetDir=%~1"
-    set "theLastChar=%targetDir:~-1%"
+    set "theTrailingChar=%targetDir:~-1%"
 
-    rem targetDirWithLastSlash, targetDirNoLastSlash
-    if "%theLastChar%"=="\" (
-        set "targetDirWithLastSlash=%targetDir%" & set "targetDirNoLastSlash=%targetDir:~0,-1%"
+    rem targetDirWithTrailingSlash, targetDirNoTrailingSlash
+    if "%theTrailingChar%"=="\" (
+        set "targetDirWithTrailingSlash=%targetDir%" & set "targetDirNoTrailingSlash=%targetDir:~0,-1%"
     ) else (
-        set "targetDirWithLastSlash=%targetDir%\" & set "targetDirNoLastSlash=%targetDir%"
+        set "targetDirWithTrailingSlash=%targetDir%\" & set "targetDirNoTrailingSlash=%targetDir%"
     )
 
     rem
-    for /F "usebackq delims=" %%F in (`dir /B /A-L "%targetDirWithLastSlash%"`) do (
-        echo "%targetDirNoLastSlash%\%%~F"
-        if exist "%targetDirNoLastSlash%\%%~F\*.*" (
-            call :_listDir "%targetDirNoLastSlash%\%%~F"
+    for /F "usebackq delims=" %%F in (`dir /B /A-L "%targetDirWithTrailingSlash%"`) do (
+        echo "%targetDirNoTrailingSlash%\%%~F"
+        if exist "%targetDirNoTrailingSlash%\%%~F\*.*" (
+            call :_listDir "%targetDirNoTrailingSlash%\%%~F"
         )
     )
     goto :eof

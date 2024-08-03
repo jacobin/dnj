@@ -47,12 +47,24 @@ void MyList(TCHAR* szDir, size_t nLen)
 ///////////////////////////////////////////////////////////////////////////////
 int _tmain(int argc, TCHAR* argv[])
 {
+    // https://ss64.com/nt/syntax-esc.html
+    /*
+    The \ escape can cause problems with quoted directory paths that contain
+    a trailing backslash because the closing quote " at the end of the line 
+    will be escaped \".
+
+    To save a directory path with a trailing backslash(\) requires adding a 
+    second backslash to 'escape the escape'
+    
+    so for example instead of "C:\My Docs\" use "C:\My Docs\\"
+    */
     if (argc <= 1) {
         _ftprintf(stderr, _T("You must specify the target path."));
         exit(1);
     }
     if (!PathFileExists(argv[1])) {
-        _ftprintf(stderr, _T("The path you specified does not exist."));
+        _ftprintf(stderr, _T("The path \"%s\" you specified does not exist.")
+            , argv[1]);
         exit(1);
     }
     if (!(GetFileAttributes(argv[1]) & FILE_ATTRIBUTE_DIRECTORY)) {
@@ -68,7 +80,7 @@ int _tmain(int argc, TCHAR* argv[])
         szTargetDir[nLen + 1] = NULL;
     }
 
-    MyList(szTargetDir, nLen + 1);
+    MyList(szTargetDir, _tcslen(szTargetDir));
     return 0;
 }
 
