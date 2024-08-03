@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 # include <stdio.h>
 # include <windows.h>
 # include <tchar.h>
@@ -6,9 +6,9 @@
 
 // https://blog.csdn.net/guowenyan001/article/details/17259173
 # include <Shlwapi.h>
-# pragma comment(lib, "shlwapi.lib")  //Windows API PathFileExists
+# pragma comment(lib, "shlwapi.lib")  // Windows API PathFileExists
 
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 void MyList(TCHAR* szDir, size_t nLen)
 {
     assert(szDir[nLen - 1] == _T('\\'));
@@ -44,7 +44,7 @@ void MyList(TCHAR* szDir, size_t nLen)
     FindClose(hFile);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 int _tmain(int argc, TCHAR* argv[])
 {
     if (argc <= 1) {
@@ -52,27 +52,24 @@ int _tmain(int argc, TCHAR* argv[])
         exit(1);
     }
     if (!PathFileExists(argv[1])) {
-        _ftprintf(stderr
-            , _T("The path you specified does not exist."));
+        _ftprintf(stderr, _T("The path you specified does not exist."));
         exit(1);
     }
     if (!(GetFileAttributes(argv[1]) & FILE_ATTRIBUTE_DIRECTORY)) {
-        _ftprintf(stderr
-            , _T("The path you specified is not a directory."));
+        _ftprintf(stderr, _T("The path you specified is not a directory."));
         exit(1);
     }
 
     TCHAR szTargetDir[2048] = { NULL };
     _stprintf(szTargetDir, _T("%s"), argv[1]);
-    auto nLen = _tcslen(szTargetDir);
-    if (_T('\\') != szTargetDir[nLen - 1])
-    {
+    const auto nLen = _tcslen(szTargetDir);
+    if (_T('\\') != szTargetDir[nLen - 1]) {
         szTargetDir[nLen] = _T('\\');
         szTargetDir[nLen + 1] = NULL;
     }
 
-    MyList(szTargetDir, _tcslen(szTargetDir));
+    MyList(szTargetDir, nLen + 1);
     return 0;
 }
 
-////////////////////////////////// END /////////////////////////////////////////
+////////////////////////////////// END ////////////////////////////////////////
